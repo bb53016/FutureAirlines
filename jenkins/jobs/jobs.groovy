@@ -16,7 +16,6 @@ pipelineJob("Developer-CI-Pipeline") {
     stringParam('terraformBucket', "s3-bucket-name", 'Terraform bucket for tfstate file')
     stringParam('terraformPrefix', "s3-bucket-directory", 'Terraform directory for tfstate file')
     stringParam('terraformKey', "s3-bucket-filename", 'Terraform tfstate file name')
-    , , 
   }
   definition {
     cps {
