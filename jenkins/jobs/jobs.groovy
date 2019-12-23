@@ -2,7 +2,7 @@
 def gitCreds           = '<GitHub Credentail encoded into Jenkins>'
 def gitBuildRepo       = '<URL to GitHub Repository>' 
 
-pipelineJob("Deployment-Pipeline") {
+pipelineJob("Developer-CI-Pipeline") {
   description('')
   [$class: 'BuildBlockerProperty',
      blockLevel: 'GLOBAL',
