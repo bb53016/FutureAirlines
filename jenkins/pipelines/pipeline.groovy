@@ -31,9 +31,8 @@ node ('deployer') {
        }
 
        stage ('Compute Stack Plan') {
-         global_tfvars = "../../environments/global.tfvars"
-         env_tfvars = "../../environments/${terraformenv}.tfvars"
-         terraform_plan(terraformenv, global_tfvars, env_tfvars)
+         env_tfvars = "../..//${terraformenv}.tfvars"
+         terraform_plan(terraformenv, env_tfvars)
        }
 
        if (terraformApplyPlan == 'true') {
@@ -66,7 +65,7 @@ def terraform_plan(workspace,global_tfvars,env_tfvars) {
 
     // This is only used for Windows AMIs, if Linux exclude the line below
     {
-	    sh "terraform plan -no-color -out=tfplan -input=false -var-file=${global_tfvars} -var-file=${env_tfvars}"
+	    sh "terraform plan -no-color -out=tfplan -input=false -var-file=${env_tfvars}"
 	}
 }
 
