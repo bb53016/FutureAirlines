@@ -31,7 +31,7 @@ node ('deployer') {
        }
 
        stage ('Compute Stack Plan') {
-         env_tfvars = "../..//${terraformenv}.tfvars"
+         env_tfvars = "../../infras-as-code/terraform/ec2/config.tfvars"
          terraform_plan(terraformenv, env_tfvars)
        }
 
@@ -53,20 +53,18 @@ def git_checkout() {
 def terraform_init(terraformBucket,terraformPrefix,terraformkey) {
 	withEnv(["GIT_ASKPASS=${WORKSPACE}/git-askpass-${BUILD_TAG}"]) {
 		withCredentials([usernamePassword(credentialsId: gitCreds, passwordVariable: 'STASH_PASSWORD', usernameVariable: 'STASH_USERNAME')]) {
-			sh "terraform init -no-color -force-copy -input=false -upgrade=true -backend=true -backend-config='bucket=${terraformBucket}' -backend-config='workspace_key_prefix=${terraformPrefix}' -backend-config='key=${terraformkey}'"
-		    sh "terraform get -no-color -update=true"
+		sh "terraform init -no-color -force-copy -input=false -upgrade=true -backend=true -backend-config='bucket=${terraformBucket}' -backend-config='workspace_key_prefix=${terraformPrefix}' -backend-config='key=${terraformkey}'"
+		sh "terraform get -no-color -update=true"
 		}
 	}
 }
 
-def terraform_plan(workspace,global_tfvars,env_tfvars) {
+def terraform_plan(workspace,env_tfvars) {
 	sh "terraform workspace new ${workspace}"
 	sh "terraform workspace select ${workspace}"
-
-    // This is only used for Windows AMIs, if Linux exclude the line below
     {
-	    sh "terraform plan -no-color -out=tfplan -input=false -var-file=${env_tfvars}"
-	}
+	sh "terraform plan -no-color -out=tfplan -input=false -var-file=${env_tfvars}"
+    }
 }
 
 def terraform_apply() {
